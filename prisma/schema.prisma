@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PetStatus {
+  SAFE
+  LOST
+}
+
+enum Species {
+  DOG
+  CAT
+  OTHER
+}
+
+model User {
+  id               String   @id @default(cuid())
+  name             String
+  email            String   @unique
+  phone            String
+  passwordHash     String
+  address          String?
+  area             String?
+  emergencyContact String?
+  pets             Pet[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Pet {
+  id                String          @id @default(cuid())
+  ownerId           String
+  owner             User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  name              String
+  species           Species
+  breed             String?
+  gender            String?
+  age               String?
+  weight            String?
+  color             String?
+  photoUrl          String?
+  microchipId       String?
+  healthNote        String?
+  identifyingMarks  String?
+  status            PetStatus       @default(SAFE)
+  qrToken           String          @unique
+  isPublic          Boolean         @default(true)
+  lostAt            DateTime?
+  lostArea          String?
+  lostDescription   String?
+  foundReports      FoundReport[]
+  qrScanEvents      QrScanEvent[]
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+model FoundReport {
+  id            String   @id @default(cuid())
+  petId         String
+  pet           Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+  reporterName  String?
+  reporterPhone String?
+  message       String?
+  locationText  String?
+  latitude      Float?
+  longitude     Float?
+  createdAt     DateTime @default(now())
+}
+
+model QrScanEvent {
+  id           String   @id @default(cuid())
+  petId        String
+  pet          Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+  token        String
+  userAgent    String?
+  ipAddress    String?
+  locationText String?
+  scannedAt    DateTime @default(now())
+}

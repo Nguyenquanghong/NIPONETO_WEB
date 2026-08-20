@@ -1,150 +1,71 @@
-# NIPPON PET CARE - Kế hoạch triển khai
+# NIPPON PET ID - Implementation Plan
 
-## 1. Định vị sản phẩm
+## Product scope
 
-NIPPON PET CARE là nền tảng **Pet Health SaaS + Hospital CRM + QR/Microchip Identity System** cho chủ nuôi, bác sĩ thú y và đội vận hành bệnh viện.
+NIPPON PET ID is a student MVP for pet owners to manage pet profiles, generate one QR identity per pet, mark a pet as lost, and let finders scan the QR page to contact the owner or submit a found-location report.
 
-Trọng tâm không phải website giới thiệu, mà là hệ thống dashboard all-in-one gồm:
+Out of scope: hospital, doctor, appointments, grooming, marketplace, loyalty, surveys, review map, medical-heavy records, telehealth, chat doctor.
 
-- Hồ sơ thú cưng thông minh.
-- Microchip ISO 15 số và QR public/private.
-- Sổ bệnh án điện tử.
-- Lịch khám, tiêm phòng, tẩy giun, spa/grooming.
-- Chatbox AI/tư vấn bác sĩ.
-- Bảng tin y tế, sổ tay chăm sóc, ưu đãi, khảo sát.
-- Cộng đồng, tìm thú cưng thất lạc, marketplace, review map ở phase sau.
+## Route map
 
-## 2. Stack kỹ thuật MVP
+- `/` landing page
+- `/login` demo login
+- `/register` demo register
+- `/dashboard` owner overview
+- `/profile` owner contact profile
+- `/pets` pet profiles and QR status
+- `/lost-pets` public lost-pet board
+- `/qr/[token]` public QR scan page and found-report form
 
-- Frontend/full-stack: Next.js 16 App Router, TypeScript, Tailwind CSS 4.
-- Database đề xuất: PostgreSQL.
-- ORM đề xuất: Prisma.
-- Auth đề xuất: Auth.js/NextAuth hoặc JWT custom theo RBAC.
-- Storage đề xuất: Cloudinary/S3-compatible cho ảnh pet, xét nghiệm, phim chụp.
-- Realtime/chat đề xuất: Socket.IO, Pusher hoặc Ably ở phase realtime.
-- Notification phase đầu: in-app/email; phase sau: SMS/Zalo OA/push notification.
-- Map/GPS phase sau: Google Maps API hoặc Mapbox.
+## MVP data model
 
-## 3. Role hệ thống
+- `User`: owner account and contact data
+- `Pet`: pet profile, status, QR token, health note, identifying marks
+- `FoundReport`: finder contact/location/message
+- `QrScanEvent`: optional scan analytics
 
-- PUBLIC: người quét QR không đăng nhập.
-- PET_OWNER: chủ thú cưng.
-- DOCTOR: bác sĩ thú y.
-- RECEPTIONIST: lễ tân/điều phối lịch.
-- GROOMER: nhân viên spa/grooming.
-- CUSTOMER_SUPPORT: nhân viên chat/chăm sóc khách hàng.
-- MODERATOR: kiểm duyệt cộng đồng/marketplace.
-- ADMIN: quản trị hệ thống.
+## Backend/deploy recommendation
 
-## 4. MVP 6-8 tuần
+Recommended stack for deploy readiness:
 
-### Sprint 1 - Foundation
+- Next.js Route Handlers or Server Actions
+- Prisma ORM
+- PostgreSQL from Supabase or Neon
+- Vercel deployment
+- Simple cookie session auth for student MVP, then upgrade to Auth.js if needed
 
-- Khởi tạo Next.js + TypeScript + Tailwind.
-- Dựng layout SaaS/Medical: Header, Sidebar, Main Content, Floating Chatbox.
-- Tạo design tokens, UI primitives, mock dashboard.
-- Chuẩn hóa cấu trúc thư mục.
+## Phases
 
-### Sprint 2 - Auth & RBAC
+### Phase 1 - frontend MVP with mock data
 
-- Đăng ký, đăng nhập, đăng xuất.
-- Session/middleware bảo vệ route.
-- Phân quyền PET_OWNER, DOCTOR, ADMIN.
-- Trang profile cá nhân.
+- Refocus UI to Pet Identity & Lost Pet Finder
+- Remove unrelated modules/routes
+- Keep owner dashboard, profile, pets, lost pets, QR public page
+- Use mock data and client demo interactions
 
-### Sprint 3 - Pet Profile + Microchip/QR
+### Phase 2 - database foundation
 
-- CRUD hồ sơ thú cưng.
-- Mã microchip ISO 15 chữ số.
-- QR token duy nhất.
-- Trang public `/qr/[token]`.
-- Cấu hình dữ liệu công khai/bảo mật.
-- Nút báo tìm thấy thú cưng.
+- Add Prisma schema
+- Configure `DATABASE_URL`
+- Run migration to PostgreSQL
+- Add seed data
 
-### Sprint 4 - Digital Health Record
+### Phase 3 - API integration
 
-- Hồ sơ bệnh án điện tử.
-- Lịch sử khám.
-- Chẩn đoán, ghi chú bác sĩ.
-- Dị ứng, bệnh mãn tính.
-- Đơn thuốc cơ bản.
-- Upload tài liệu y tế nếu storage sẵn sàng.
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET/PUT /api/profile`
+- `GET/POST /api/pets`
+- `GET/PUT/DELETE /api/pets/[id]`
+- `PATCH /api/pets/[id]/status`
+- `GET /api/lost-pets`
+- `GET /api/public/qr/[token]`
+- `POST /api/public/qr/[token]/report-found`
 
-### Sprint 5 - Appointment & Reminder
+### Phase 4 - deploy and polish
 
-- Đặt lịch khám.
-- Chọn pet, dịch vụ, ngày/giờ, triệu chứng.
-- Admin/bác sĩ xác nhận/hủy/hoàn thành.
-- Lịch tiêm, tẩy giun, tái khám.
-- Notification nội bộ.
-
-### Sprint 6 - Chatbox & Announcements
-
-- Floating chatbox.
-- FAQ bot rule-based.
-- Gửi tin nhắn đến bác sĩ/admin.
-- Quản lý hội thoại cơ bản.
-- Bảng tin/thông báo y tế.
-
-### Sprint 7 - Admin Dashboard
-
-- Quản lý user.
-- Quản lý pet.
-- Quản lý lịch hẹn.
-- Quản lý bệnh án.
-- Quản lý thông báo.
-- Quản lý chat.
-- Thống kê cơ bản.
-
-### Sprint 8 - QA & Deploy
-
-- Test responsive.
-- Test phân quyền.
-- Test QR public/private.
-- Test validate form.
-- Kiểm tra lint/build.
-- Deploy staging.
-
-## 5. Phase 2
-
-- Knowledge Base/sổ tay chăm sóc.
-- Interactive onboarding microchip/QR.
-- Spa & grooming nâng cao.
-- Voucher, loyalty N-Point.
-- Khảo sát NPS.
-- SMS/Zalo notification.
-- Upload cloud đầy đủ cho xét nghiệm, X-quang, siêu âm.
-
-## 6. Phase 3
-
-- Diễn đàn cộng đồng.
-- Tìm chó/mèo thất lạc với GPS bán kính 5km.
-- Marketplace phụ kiện/thức ăn.
-- Review Map phòng khám, khách sạn thú cưng, pet cafe.
-- Đặt phòng khách sạn thú cưng.
-- AI bot nâng cao.
-- Telehealth realtime.
-- Đa ngôn ngữ.
-- Mobile app/PWA.
-
-## 7. Bảo mật bắt buộc
-
-- Chủ nuôi chỉ xem pet của mình.
-- Public QR chỉ hiển thị dữ liệu tối thiểu.
-- Bệnh án, đơn thuốc, xét nghiệm chỉ hiển thị cho chủ sở hữu/bác sĩ có quyền.
-- Audit log cho hành động xem/sửa/xóa dữ liệu y tế.
-- Validate dữ liệu bằng schema.
-- Không commit secret/API key.
-
-## 8. Thứ tự triển khai code tiếp theo
-
-1. Tách dashboard hiện tại thành components.
-2. Tạo route groups: `(app)`, `(auth)`, `(public)`.
-3. Tạo Prisma schema ban đầu.
-4. Cài và cấu hình auth.
-5. Làm CRUD pet profile.
-6. Làm QR public page.
-7. Làm medical record.
-8. Làm appointment.
-9. Làm chatbox cơ bản.
-10. Làm admin dashboard.
+- Deploy to Vercel
+- Connect Neon/Supabase Postgres
+- Add loading/error states
+- Test mobile QR flow
+- Prepare README, ERD, slides and demo script

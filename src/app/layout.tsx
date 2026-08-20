@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NIPPON PET CARE | Hệ thống chăm sóc thú cưng All-in-One",
+  title: "NIPPON PET ID | QR định danh thú cưng",
   description:
-    "Dashboard quản lý hồ sơ thú cưng, microchip, QR định danh, bệnh án điện tử, lịch khám và tư vấn trực tuyến.",
+    "Website quản lý hồ sơ thú cưng, tạo QR vòng cổ, báo thất lạc và hỗ trợ người tìm thấy liên hệ chủ nuôi.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -3,12 +3,12 @@ import Link from "next/link";
 export function Logo() {
   return (
     <Link href="/dashboard" className="flex items-center gap-3">
-      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-600 text-xl font-black text-white">
-        NP
+      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-600 text-xl font-black text-white shadow-lg shadow-emerald-100">
+        🐾
       </div>
       <div>
-        <p className="text-lg font-black tracking-tight text-slate-950">NIPPON PET CARE</p>
-        <p className="text-xs font-medium text-emerald-700">Công Nghệ Nhật Bản - Tận Tâm Chăm Sóc Thú Cưng</p>
+        <p className="text-lg font-black tracking-tight text-slate-950">NIPPON PET ID</p>
+        <p className="text-xs font-medium text-emerald-700">QR định danh giúp thú cưng trở về nhà</p>
       </div>
     </Link>
   );
@@ -16,7 +16,7 @@ export function Logo() {
 
 export function PageHeader({ eyebrow, title, description, action }: { eyebrow?: string; title: string; description?: string; action?: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-4 rounded-[2rem] bg-gradient-to-r from-emerald-700 via-teal-600 to-cyan-600 p-7 text-white shadow-xl shadow-emerald-100 md:flex-row md:items-end md:justify-between">
+    <div className="flex flex-col gap-4 rounded-[2rem] bg-gradient-to-r from-emerald-700 via-teal-600 to-lime-500 p-7 text-white shadow-xl shadow-emerald-100 md:flex-row md:items-end md:justify-between">
       <div>
         {eyebrow ? <p className="text-sm font-bold uppercase tracking-[0.22em] text-emerald-100">{eyebrow}</p> : null}
         <h1 className="mt-2 text-3xl font-black leading-tight md:text-4xl">{title}</h1>
