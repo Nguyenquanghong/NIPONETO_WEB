@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { navItems } from "@/data/mock";
 import { Logo } from "@/components/ui";
 
@@ -22,15 +25,20 @@ export function AppHeader() {
 }
 
 export function AppSidebar() {
+  const pathname = usePathname();
+
   return (
     <aside className="fixed bottom-0 left-0 top-[69px] z-20 hidden w-72 border-r border-slate-200 bg-white p-4 lg:block">
       <nav className="space-y-1 overflow-y-auto pb-4">
-        {navItems.map((item, index) => (
-          <Link key={item.href} href={item.href} className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-bold transition ${index === 0 ? "bg-emerald-600 text-white shadow-lg shadow-emerald-200" : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"}`}>
+        {navItems.map((item) => {
+          const active = pathname === item.href;
+
+          return (
+          <Link key={item.href} href={item.href} className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-bold transition ${active ? "bg-emerald-600 text-white shadow-lg shadow-emerald-200" : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"}`}>
             <span className="text-lg">{item.icon}</span>
             {item.label}
           </Link>
-        ))}
+        );})}
       </nav>
     </aside>
   );

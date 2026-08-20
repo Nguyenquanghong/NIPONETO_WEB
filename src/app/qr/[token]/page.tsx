@@ -1,4 +1,5 @@
 ﻿import Link from "next/link";
+import { FoundPetButton } from "@/components/demo-interactions";
 import { pets } from "@/data/mock";
 
 export default async function QrPublicPage(props: PageProps<'/qr/[token]'>) {
@@ -22,9 +23,7 @@ export default async function QrPublicPage(props: PageProps<'/qr/[token]'>) {
             <p className="text-sm text-slate-500">Microchip ISO</p>
             <p className="font-mono text-xl font-black">{pet.microchip}</p>
           </div>
-          <button className="w-full rounded-full bg-emerald-600 px-5 py-4 font-black text-white">
-            Báo tôi đã tìm thấy thú cưng này
-          </button>
+          <FoundPetButton />
           <Link href="/login" className="block text-center text-sm font-bold text-emerald-700">
             Chủ sở hữu/Bác sĩ đăng nhập để xem hồ sơ bảo mật
           </Link>
