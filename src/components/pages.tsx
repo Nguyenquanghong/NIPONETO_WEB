@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
-import { AddPetDemoForm, LostStatusButton } from "@/components/pet-interactions";
+import { AddPetDemoForm, LostStatusButton, QrCodeCard } from "@/components/pet-interactions";
 import { Card, PageHeader, Pill, SectionTitle, StatCard } from "@/components/ui";
 import { foundReports, owner, pets, stats } from "@/data/mock";
 
@@ -117,6 +117,7 @@ function PetList({ compact = false }: { compact?: boolean }) {
               <p>QR Token: <b className="font-mono">{pet.qrToken}</b></p>
               <p>Microchip: <b>{pet.microchip}</b></p>
               {!compact ? <><p>Đặc điểm: {pet.identifyingMarks}</p><p>Lưu ý sức khỏe: {pet.healthNote}</p></> : null}
+              {!compact ? <QrCodeCard token={pet.qrToken} petName={pet.name} compact /> : null}
               <div className="flex flex-wrap gap-2 pt-2">
                 <Link href={`/qr/${pet.qrToken}`} className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-black text-white">Xem QR</Link>
                 <Link href="/lost-pets" className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-700">Trang thất lạc</Link>

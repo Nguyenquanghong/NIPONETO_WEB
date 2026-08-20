@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FoundReportForm } from "@/components/pet-interactions";
+import { FoundReportForm, QrCodeCard } from "@/components/pet-interactions";
 import { owner, pets } from "@/data/mock";
 
 export default async function QrPublicPage(props: PageProps<"/qr/[token]">) {
@@ -32,6 +32,7 @@ export default async function QrPublicPage(props: PageProps<"/qr/[token]">) {
             <Info label="Microchip" value={pet.microchip} />
             <Info label="Khu vực chủ nuôi" value={owner.area} />
           </div>
+          <QrCodeCard token={pet.qrToken} petName={pet.name} />
           <div className="grid gap-3 md:grid-cols-2">
             <a href={`tel:${owner.phone.replaceAll(" ", "")}`} className="rounded-full bg-slate-950 px-5 py-4 text-center font-black text-white">Gọi chủ nuôi</a>
             <Link href="/lost-pets" className="rounded-full bg-emerald-600 px-5 py-4 text-center font-black text-white">Xem trang thất lạc</Link>

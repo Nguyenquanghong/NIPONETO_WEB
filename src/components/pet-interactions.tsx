@@ -1,6 +1,78 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
-import { useState } from "react";
+import QRCode from "qrcode";
+import { useEffect, useMemo, useState } from "react";
+
+function getQrBaseUrl() {
+  if (typeof window !== "undefined") {
+    return window.location.origin;
+  }
+
+  return process.env.NEXT_PUBLIC_APP_URL ?? process.env.APP_URL ?? "http://localhost:3000";
+}
+
+export function QrCodeCard({ token, petName, compact = false }: { token: string; petName: string; compact?: boolean }) {
+  const [qrImage, setQrImage] = useState("");
+  const [copied, setCopied] = useState(false);
+  const qrUrl = useMemo(() => `${getQrBaseUrl()}/qr/${token}`, [token]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    QRCode.toDataURL(qrUrl, {
+      width: compact ? 180 : 260,
+      margin: 2,
+      errorCorrectionLevel: "H",
+      color: {
+        dark: "#064e3b",
+        light: "#ffffff",
+      },
+    }).then((dataUrl) => {
+      if (mounted) {
+        setQrImage(dataUrl);
+      }
+    });
+
+    return () => {
+      mounted = false;
+    };
+  }, [compact, qrUrl]);
+
+  function downloadQr() {
+    if (!qrImage) return;
+    const link = document.createElement("a");
+    link.href = qrImage;
+    link.download = `qr-${petName.toLowerCase().replaceAll(" ", "-")}-${token}.png`;
+    link.click();
+  }
+
+  async function copyUrl() {
+    await navigator.clipboard.writeText(qrUrl);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1800);
+  }
+
+  function printQr() {
+    window.print();
+  }
+
+  return (
+    <div className="rounded-[2rem] border border-emerald-100 bg-white p-5 text-center shadow-sm print:shadow-none">
+      <p className="text-sm font-black uppercase tracking-[0.2em] text-emerald-700">QR thật</p>
+      <h3 className="mt-1 text-xl font-black text-slate-950">{petName}</h3>
+      <div className="mx-auto mt-4 flex w-fit rounded-3xl bg-white p-3 shadow-inner ring-1 ring-slate-100">
+        {qrImage ? <img src={qrImage} alt={`Mã QR của ${petName}`} className={compact ? "h-36 w-36" : "h-56 w-56"} /> : <div className={compact ? "h-36 w-36 animate-pulse rounded-2xl bg-slate-100" : "h-56 w-56 animate-pulse rounded-2xl bg-slate-100"} />}
+      </div>
+      <p className="mt-3 break-all rounded-2xl bg-emerald-50 p-3 font-mono text-xs font-bold text-emerald-900">{qrUrl}</p>
+      <div className="mt-4 grid gap-2 sm:grid-cols-3 print:hidden">
+        <button onClick={downloadQr} className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-black text-white">Tải PNG</button>
+        <button onClick={copyUrl} className="rounded-full bg-slate-100 px-4 py-2 text-xs font-black text-slate-700">{copied ? "Đã copy" : "Copy link"}</button>
+        <button onClick={printQr} className="rounded-full bg-slate-950 px-4 py-2 text-xs font-black text-white">In QR</button>
+      </div>
+    </div>
+  );
+}
 
 export function LostStatusButton({ initialStatus }: { initialStatus: string }) {
   const [status, setStatus] = useState(initialStatus);
