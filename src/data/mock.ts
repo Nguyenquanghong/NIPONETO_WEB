@@ -1,8 +1,8 @@
 export const navItems = [
-  { href: "/dashboard", icon: "🏠", label: "Tổng quan" },
-  { href: "/profile", icon: "👤", label: "Hồ sơ chủ nuôi" },
-  { href: "/pets", icon: "🐾", label: "Thú cưng của tôi" },
-  { href: "/lost-pets", icon: "🚨", label: "Tìm thú thất lạc" },
+  { href: "/dashboard", icon: "⌂", label: "Dashboard" },
+  { href: "/lost-pets", icon: "⌕", label: "Lost Pets" },
+  { href: "/pets", icon: "⊕", label: "My Pets" },
+  { href: "/profile", icon: "♙", label: "Profile" },
 ];
 
 export const owner = {
@@ -32,6 +32,7 @@ export const pets = [
     lastSeenArea: "Dịch Vọng, Cầu Giấy",
     lostDescription: "",
     image: "🐱",
+    photo: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=1000&q=80",
     gradient: "from-emerald-400 to-teal-500",
   },
   {
@@ -51,6 +52,7 @@ export const pets = [
     lastSeenArea: "Công viên Nghĩa Đô, Cầu Giấy",
     lostDescription: "Đi lạc lúc khoảng 18:30, thân thiện nhưng dễ hoảng khi có tiếng xe lớn.",
     image: "🐕",
+    photo: "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1000&q=80",
     gradient: "from-orange-400 to-amber-500",
   },
 ];
